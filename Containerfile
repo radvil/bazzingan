@@ -1,21 +1,29 @@
-FROM ghcr.io/ublue-os/silverblue-main:latest
+# Using Bazzite variants as base images
+# renovate: datasource=github-releases depName=ublue-os/bazzite
+# Default to bazzite-asus-nvidia if not specified
 
-## Other possible base images include:
-# FROM ghcr.io/ublue-os/bazzite:stable
-# FROM ghcr.io/ublue-os/bluefin-nvidia:stable
-# 
-# ... and so on, here are more base images
-# Universal Blue Images: https://github.com/orgs/ublue-os/packages
-# Fedora base image: quay.io/fedora/fedora-bootc:41
-# CentOS base images: quay.io/centos-bootc/centos-bootc:stream10
+ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-bazzite-asus-nvidia}"
+ARG BASE_IMAGE_TAG="${BASE_IMAGE_TAG:-stable}"
 
-### MODIFICATIONS
-## make modifications desired in your image and install packages by modifying the build.sh script
-## the following RUN directive does all the things required to run "build.sh" as recommended.
+FROM ghcr.io/ublue-os/${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as bazzingan
 
-COPY build.sh /tmp/build.sh
+ARG BASE_IMAGE_NAME
+ENV BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
+    IS_GNOME_VARIANT=0 \
+    IS_OPEN_DRIVER=0
 
-RUN mkdir -p /var/lib/alternatives && \
-    /tmp/build.sh && \
-    ostree container commit
-    
+RUN if [[ "${BASE_IMAGE_NAME}" == *"gnome"* ]]; then \
+      echo "Setting GNOME variant flag" && \
+      echo "IS_GNOME_VARIANT=1" >> /etc/environment && \
+      sed -i 's/^ENV IS_GNOME_VARIANT=.*/ENV IS_GNOME_VARIANT=1/' /Containerfile; \
+    fi && \
+    if [[ "${BASE_IMAGE_NAME}" == *"-open"* ]]; then \
+      echo "Setting open driver flag" && \
+      echo "IS_OPEN_DRIVER=1" >> /etc/environment && \
+      sed -i 's/^ENV IS_OPEN_DRIVER=.*/ENV IS_OPEN_DRIVER=1/' /Containerfile; \
+    fi
+
+COPY root /
+COPY runners /runners
+COPY /builders/gh.sh /tmp/init.sh
+RUN /tmp/init.sh

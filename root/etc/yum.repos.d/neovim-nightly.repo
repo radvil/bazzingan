@@ -1,0 +1,10 @@
+[neovim-nightly]
+name=Neovim Nightly
+baseurl=https://download.copr.fedorainfracloud.org/results/agriffis/neovim-nightly/fedora-$releasever-$basearch/
+gpgkey=https://download.copr.fedorainfracloud.org/results/agriffis/neovim-nightly/pubkey.gpg
+skip_if_unavailable=True
+enabled_metadata=1
+repo_gpgcheck=0
+type=rpm-md
+gpgcheck=1
+enabled=1

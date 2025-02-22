@@ -1,0 +1,10 @@
+[lazygit]
+name=Lazygit
+baseurl=https://download.copr.fedorainfracloud.org/results/atim/lazygit/fedora-$releasever-$basearch/
+gpgkey=https://download.copr.fedorainfracloud.org/results/atim/lazygit/pubkey.gpg
+skip_if_unavailable=True
+enabled_metadata=1
+repo_gpgcheck=0
+type=rpm-md
+gpgcheck=1
+enabled=1
