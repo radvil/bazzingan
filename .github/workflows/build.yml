@@ -77,11 +77,17 @@
               echo "Required init script is missing"
               exit 1
             fi
-            # Check if init script is executable
-            if [ ! -x "builders/gh.sh" ]; then
-              echo "Making init script executable"
-              chmod +x builders/gh.sh
-            fi
+            # Make all shell scripts executable
+            find runners builders -type f -name "*.sh" -exec chmod +x {} \;
+            echo "Made all shell scripts executable"
+            # Verify permissions
+            for script in $(find runners builders -type f -name "*.sh"); do
+              if [ ! -x "$script" ]; then
+                echo "ERROR: Script $script is not executable"
+                exit 1
+              fi
+              echo "Verified permissions for $script"
+            done
   
         - name: Get current date
           id: date
