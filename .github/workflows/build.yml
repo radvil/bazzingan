@@ -29,11 +29,11 @@
         fail-fast: false  # Don't cancel all jobs if one fails
         matrix:
           include:
-            - base_image: bazzite-asus-nvidia
-              variant_name: kde-nvidia
-              variant_desc_prefix: KDE NVIDIA
-              is_gnome: false
-              is_open_driver: false
+            # - base_image: bazzite-asus-nvidia
+            #   variant_name: kde-nvidia
+            #   variant_desc_prefix: KDE NVIDIA
+            #   is_gnome: false
+            #   is_open_driver: false
             # - base_image: bazzite-asus-nvidia-open
             #   variant_name: kde-nvidia-open
             #   variant_desc_prefix: KDE NVIDIA Open

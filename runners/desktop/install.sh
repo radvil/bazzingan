@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ouex pipefail
+set -euo pipefail
 
 echo "Building variant:"
 echo "» Base Image Name : ${BASE_IMAGE}"
