@@ -34,21 +34,21 @@
               variant_desc_prefix: KDE NVIDIA
               is_gnome: false
               is_open_driver: false
-            - base_image: bazzite-asus-nvidia-open
-              variant_name: kde-nvidia-open
-              variant_desc_prefix: KDE NVIDIA Open
-              is_gnome: false
-              is_open_driver: true
+            # - base_image: bazzite-asus-nvidia-open
+            #   variant_name: kde-nvidia-open
+            #   variant_desc_prefix: KDE NVIDIA Open
+            #   is_gnome: false
+            #   is_open_driver: true
             - base_image: bazzite-gnome-asus-nvidia
               variant_name: gnome-nvidia
               variant_desc_prefix: GNOME NVIDIA
               is_gnome: true
               is_open_driver: false
-            - base_image: bazzite-gnome-asus-nvidia-open
-              variant_name: gnome-nvidia-open
-              variant_desc_prefix: GNOME NVIDIA Open
-              is_gnome: true
-              is_open_driver: true
+            # - base_image: bazzite-gnome-asus-nvidia-open
+            #   variant_name: gnome-nvidia-open
+            #   variant_desc_prefix: GNOME NVIDIA Open
+            #   is_gnome: true
+            #   is_open_driver: true
       name: Build and push ${{ matrix.variant_name }}
       runs-on: ubuntu-24.04
   

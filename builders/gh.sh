@@ -8,12 +8,13 @@ log() {
 check_requirements() {
     local required_tools=("podman" "just")
     for tool in "${required_tools[@]}"; do
-        if ! command -v "$tool" &> /dev/null; then
+        if ! command -v "$tool" &>/dev/null; then
             log "ERROR: Required tool '$tool' is not installed"
             exit 1
         fi
     done
 }
+
 check_env_vars() {
     local required_vars=("BASE_IMAGE" "IS_GNOME_VARIANT")
     for var in "${required_vars[@]}"; do
@@ -26,11 +27,11 @@ check_env_vars() {
 
 main() {
     log "Starting initialization script"
-    
+
     check_requirements
-    
+
     check_env_vars
-    
+
     mkdir -p /var/lib/alternatives
 
     echo "::group:: ===» INSTALL BASE PACKAGES «==="
