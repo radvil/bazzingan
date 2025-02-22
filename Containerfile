@@ -6,10 +6,10 @@ ARG BASE_IMAGE_TAG="${BASE_IMAGE_TAG:-stable}"
 
 FROM ghcr.io/ublue-os/${BASE_IMAGE}:${BASE_IMAGE_TAG} as bazzingan
 
-# COPY Containerfile /Containerfile
+ARG BASE_IMAGE
+ENV BASE_IMAGE=${BASE_IMAGE}
 
-# ARG BASE_IMAGE
-# ENV BASE_IMAGE=${BASE_IMAGE}
+# COPY Containerfile /Containerfile
 
 # # Set variant flags based on base image name during build
 # RUN set -eo pipefail && \
@@ -30,10 +30,10 @@ FROM ghcr.io/ublue-os/${BASE_IMAGE}:${BASE_IMAGE_TAG} as bazzingan
 #         export IS_OPEN_DRIVER=0; \
 #     fi
 
-# ARG IS_GNOME_VARIANT
-# ARG IS_OPEN_DRIVER
-# ENV IS_GNOME_VARIANT=${IS_GNOME_VARIANT:-0} \
-#     IS_OPEN_DRIVER=${IS_OPEN_DRIVER:-0}
+ARG IS_GNOME_VARIANT
+ARG IS_OPEN_DRIVER
+ENV IS_GNOME_VARIANT=${IS_GNOME_VARIANT:-0} \
+    IS_OPEN_DRIVER=${IS_OPEN_DRIVER:-0}
 
 COPY --chmod=644 root /
 
