@@ -6,6 +6,8 @@ ARG BASE_IMAGE_TAG="${BASE_IMAGE_TAG:-stable}"
 
 FROM ghcr.io/ublue-os/${BASE_IMAGE}:${BASE_IMAGE_TAG} as bazzingan
 
+COPY Containerfile /Containerfile
+
 ARG BASE_IMAGE
 ENV BASE_IMAGE=${BASE_IMAGE} \
     IS_GNOME_VARIANT=0 \
