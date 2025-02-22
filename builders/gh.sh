@@ -14,9 +14,8 @@ check_requirements() {
         fi
     done
 }
-
 check_env_vars() {
-    local required_vars=("BASE_IMAGE")
+    local required_vars=("BASE_IMAGE" "IS_GNOME_VARIANT")
     for var in "${required_vars[@]}"; do
         if [ -z "${!var}" ]; then
             log "ERROR: Required environment variable '$var' is not set"

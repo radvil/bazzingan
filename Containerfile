@@ -30,6 +30,8 @@ RUN set -eo pipefail && \
         export IS_OPEN_DRIVER=0; \
     fi
 
+ARG IS_GNOME_VARIANT
+ARG IS_OPEN_DRIVER
 ENV IS_GNOME_VARIANT=${IS_GNOME_VARIANT:-0} \
     IS_OPEN_DRIVER=${IS_OPEN_DRIVER:-0}
 
