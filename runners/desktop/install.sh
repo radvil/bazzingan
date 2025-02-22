@@ -17,25 +17,24 @@ LAYERED_PACKAGES=(
   gparted
   lazygit
   neovim
-  # kitty
-  # code
+  kitty
+  code
 )
 
 KDE_PACKAGES=(
   kvantum
   breeze-gtk
-  # vinyl-theme
+  vinyl-theme
 )
 
 GNOME_PACKAGES=(
   gnome-tweaks
 )
 
-# Install layered packages
 echo "=== Installing common packages ==="
 dnf5 install -y "${LAYERED_PACKAGES[@]}"
 
-# Install desktop environment specific packages
+echo "=== Installing Desktop Environment Packages ==="
 echo "=== IS_GNOME_VARIANT: ${IS_GNOME_VARIANT}"
 
 if [[ "${IS_GNOME_VARIANT}" == "true" ]]; then

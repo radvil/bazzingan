@@ -45,7 +45,7 @@ clean_variant() {
   local tag=${2:-"latest"}
   echo "Removing bazzingan-$variant:$tag..."
   podman rmi "localhost/bazzingan-$variant:$tag" 2>/dev/null || echo "Image bazzingan-$variant:$tag not found"
-  
+
   # If removing kde-nvidia, also remove the default image
   if [ "$variant" = "kde-nvidia" ]; then
     echo "Removing bazzingan:$tag..."
@@ -70,79 +70,79 @@ COMMAND=$1
 shift
 
 case "$COMMAND" in
-  "build")
-    # Default values for build
-    VARIANT=${1:-"kde-nvidia"}
-    TAG=${2:-"latest"}
+"build")
+  # Default values for build
+  VARIANT=${1:-"kde-nvidia"}
+  TAG=${2:-"latest"}
 
-    # Map variant to base image
-    case "$VARIANT" in
-      "kde-nvidia")
-        BASE_IMAGE="bazzite-asus-nvidia"
-        ;;
-      "kde-nvidia-open")
-        BASE_IMAGE="bazzite-asus-nvidia-open"
-        ;;
-      "gnome-nvidia")
-        BASE_IMAGE="bazzite-gnome-asus-nvidia"
-        ;;
-      "gnome-nvidia-open")
-        BASE_IMAGE="bazzite-gnome-asus-nvidia-open"
-        ;;
-      *)
-        echo "Error: Unknown variant '$VARIANT'"
-        echo
-        show_help
-        exit 1
-        ;;
-    esac
-
-    echo "Building bazzingan-$VARIANT..."
-    echo "Using base image: $BASE_IMAGE"
-
-    # Build the image
-    podman build \
-      --build-arg="BASE_IMAGE=$BASE_IMAGE" \
-      --tag="localhost/bazzingan-$VARIANT:$TAG" \
-      .
-
-    # If this is kde-nvidia, also build the default image
-    if [ "$VARIANT" = "kde-nvidia" ]; then
-      echo "Building default bazzingan image..."
-      podman build \
-        --build-arg="BASE_IMAGE=localhost/bazzingan-kde-nvidia:$TAG" \
-        --tag="localhost/bazzingan:$TAG" \
-        .
-    fi
-
-    echo "Done! Images built:"
-    list_images
+  # Map variant to base image
+  case "$VARIANT" in
+  "kde-nvidia")
+    BASE_IMAGE="bazzite-asus-nvidia"
     ;;
-
-  "clean")
-    VARIANT=${1:-"kde-nvidia"}
-    TAG=${2:-"latest"}
-    clean_variant "$VARIANT" "$TAG"
-    list_images
+  "kde-nvidia-open")
+    BASE_IMAGE="bazzite-asus-nvidia-open"
     ;;
-
-  "clean-all")
-    clean_all
-    list_images
+  "gnome-nvidia")
+    BASE_IMAGE="bazzite-gnome-asus-nvidia"
     ;;
-
-  "list")
-    list_images
+  "gnome-nvidia-open")
+    BASE_IMAGE="bazzite-gnome-asus-nvidia-open"
     ;;
-
-  "help"|"-h"|"--help")
-    show_help
-    ;;
-
   *)
-    echo "Error: Unknown command '$COMMAND'"
+    echo "Error: Unknown variant '$VARIANT'"
     echo
     show_help
     exit 1
     ;;
-esac 
+  esac
+
+  echo "Building bazzingan-$VARIANT..."
+  echo "Using base image: $BASE_IMAGE"
+
+  # Build the image
+  podman build \
+    --build-arg="BASE_IMAGE=$BASE_IMAGE" \
+    --tag="localhost/bazzingan-$VARIANT:$TAG" \
+    .
+
+  # If this is kde-nvidia, also build the default image
+  if [ "$VARIANT" = "kde-nvidia" ]; then
+    echo "Building default bazzingan image..."
+    podman build \
+      --build-arg="BASE_IMAGE=localhost/bazzingan-kde-nvidia:$TAG" \
+      --tag="localhost/bazzingan:$TAG" \
+      .
+  fi
+
+  echo "Done! Images built:"
+  list_images
+  ;;
+
+"clean")
+  VARIANT=${1:-"kde-nvidia"}
+  TAG=${2:-"latest"}
+  clean_variant "$VARIANT" "$TAG"
+  list_images
+  ;;
+
+"clean-all")
+  clean_all
+  list_images
+  ;;
+
+"list")
+  list_images
+  ;;
+
+"help" | "-h" | "--help")
+  show_help
+  ;;
+
+*)
+  echo "Error: Unknown command '$COMMAND'"
+  echo
+  show_help
+  exit 1
+  ;;
+esac
