@@ -153,6 +153,8 @@
             build-args: |
               BASE_IMAGE=${{ env.BASE_IMAGE }}
               BASE_IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}
+              IS_GNOME_VARIANT=${{ env.IS_GNOME_VARIANT }}
+              IS_OPEN_DRIVER=${{ env.IS_OPEN_DRIVER }}
             oci: false
   
         # Rechunk is a script that we use on Universal Blue to make sure there isnt a single huge layer when your image gets published.
