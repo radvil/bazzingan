@@ -1,9 +1,29 @@
 #!/bin/bash
 
-set -ouex pipefail
+set -euo pipefail
 
-dnf5 remove papirus-icon-theme -y
-dnf5 clean all
+safe_remove() {
+    local path="$1"
+    if [ -e "$path" ]; then
+        echo "Removing: $path"
+        rm -rf "$path"
+    else
+        echo "Path does not exist, skipping: $path"
+    fi
+}
 
-rm -vr /installers
-rm -vr /tmp/build.sh
+echo "=========» Starting cleanup process «============="
+
+if command -v dnf5 &>/dev/null; then
+    echo "Cleaning DNF cache..."
+    dnf5 clean all || echo "Warning: DNF cleanup failed"
+fi
+
+safe_remove "/var/cache/dnf"
+safe_remove "/var/tmp/*"
+safe_remove "/tmp/*"
+
+safe_remove "/runners"
+safe_remove "/tmp/init.sh"
+
+echo "=========» Cleanup completed successfully «======"
