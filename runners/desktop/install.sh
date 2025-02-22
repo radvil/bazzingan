@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 echo "Building variant:"
-echo "» Base Image Name : ${BASE_IMAGE_NAME}"
+echo "» Base Image Name : ${BASE_IMAGE}"
 echo "» Is GNOME        : ${IS_GNOME_VARIANT}"
 echo "» Is Open Driver  : ${IS_OPEN_DRIVER}"
 

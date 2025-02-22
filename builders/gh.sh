@@ -16,7 +16,7 @@ check_requirements() {
 }
 
 check_env_vars() {
-    local required_vars=("BASE_IMAGE_NAME")
+    local required_vars=("BASE_IMAGE")
     for var in "${required_vars[@]}"; do
         if [ -z "${!var}" ]; then
             log "ERROR: Required environment variable '$var' is not set"

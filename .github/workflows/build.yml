@@ -17,6 +17,7 @@
     IMAGE_NAME: "${{ github.event.repository.name }}"
     IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}" # do not edit
     ARTIFACTHUB_LOGO_URL: "https://avatars.githubusercontent.com/u/36059968?s=400&u=f3be03df760ed01f9afc9c4b160d22d3ad271b21&v=4"
+    BASE_IMAGE_TAG: "stable"  # Added to match Containerfile ARG
   
   concurrency:
     group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -28,18 +29,26 @@
         fail-fast: false  # Don't cancel all jobs if one fails
         matrix:
           include:
-            - base_image_name: bazzite-asus-nvidia
+            - base_image: bazzite-asus-nvidia
               variant_name: kde-nvidia
               variant_desc_prefix: KDE NVIDIA
-            - base_image_name: bazzite-asus-nvidia-open
+              is_gnome: false
+              is_open_driver: false
+            - base_image: bazzite-asus-nvidia-open
               variant_name: kde-nvidia-open
               variant_desc_prefix: KDE NVIDIA Open
-            - base_image_name: bazzite-gnome-asus-nvidia
+              is_gnome: false
+              is_open_driver: true
+            - base_image: bazzite-gnome-asus-nvidia
               variant_name: gnome-nvidia
               variant_desc_prefix: GNOME NVIDIA
-            - base_image_name: bazzite-gnome-asus-nvidia-open
+              is_gnome: true
+              is_open_driver: false
+            - base_image: bazzite-gnome-asus-nvidia-open
               variant_name: gnome-nvidia-open
               variant_desc_prefix: GNOME NVIDIA Open
+              is_gnome: true
+              is_open_driver: true
       name: Build and push ${{ matrix.variant_name }}
       runs-on: ubuntu-24.04
   
@@ -49,9 +58,11 @@
         id-token: write
   
       env:
-        BASE_IMAGE_NAME: "${{ matrix.base_image_name }}"
+        BASE_IMAGE: "${{ matrix.base_image }}"
         IMAGE_VARIANT: "${{ matrix.variant_name }}"
         IMAGE_DESC: "My Customized Universal Blue Image Based on Bazzite's ${{ matrix.variant_desc_prefix }}"
+        IS_GNOME_VARIANT: "${{ matrix.is_gnome }}"
+        IS_OPEN_DRIVER: "${{ matrix.is_open_driver }}"
   
       steps:
         # These stage versions are pinned by https://github.com/renovatebot/renovate
@@ -107,7 +118,6 @@
             # This generates all the tags for your image, you can add custom tags here too!
             # By default, it should generate "latest" and "latest.(date here)".
             tags: |
-              type=raw,value=stable
               type=raw,value=latest
               type=raw,value={{date 'YYYYMMDD'}}
               type=sha,enable=${{ github.event_name == 'pull_request' }}
@@ -137,11 +147,12 @@
           with:
             containerfiles: |
               ./Containerfile
-            # Postfix image name with -custom to make it a little more descriptive
-            # Syntax: https://docs.github.com/en/actions/learn-github-actions/expressions#format
             image: ${{ env.IMAGE_NAME }}-${{ env.IMAGE_VARIANT }}
             tags: ${{ steps.metadata.outputs.tags }}
             labels: ${{ steps.metadata.outputs.labels }}
+            build-args: |
+              BASE_IMAGE=${{ env.BASE_IMAGE }}
+              BASE_IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}
             oci: false
   
         # Rechunk is a script that we use on Universal Blue to make sure there isnt a single huge layer when your image gets published.
@@ -237,7 +248,7 @@
         id-token: write
   
       env:
-        BASE_IMAGE_NAME: "ghcr.io/${{ github.repository_owner }}/bazzingan-kde-nvidia:latest"
+        BASE_IMAGE: "ghcr.io/${{ github.repository_owner }}/bazzingan-kde-nvidia:latest"
         IMAGE_DESC: "Bazzingan - A Customized Universal Blue Image Based on Bazzite"
         IMAGE_VARIANT: ""  # Empty for default image
         IMAGE_SUFFIX: ""   # Empty suffix for default image
@@ -271,7 +282,6 @@
             # This generates all the tags for your image, you can add custom tags here too!
             # By default, it should generate "latest" and "latest.(date here)".
             tags: |
-              type=raw,value=stable
               type=raw,value=latest
               type=raw,value={{date 'YYYYMMDD'}}
               type=sha,enable=${{ github.event_name == 'pull_request' }}

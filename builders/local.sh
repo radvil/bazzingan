@@ -78,16 +78,16 @@ case "$COMMAND" in
     # Map variant to base image
     case "$VARIANT" in
       "kde-nvidia")
-        BASE_IMAGE_NAME="bazzite-asus-nvidia"
+        BASE_IMAGE="bazzite-asus-nvidia"
         ;;
       "kde-nvidia-open")
-        BASE_IMAGE_NAME="bazzite-asus-nvidia-open"
+        BASE_IMAGE="bazzite-asus-nvidia-open"
         ;;
       "gnome-nvidia")
-        BASE_IMAGE_NAME="bazzite-gnome-asus-nvidia"
+        BASE_IMAGE="bazzite-gnome-asus-nvidia"
         ;;
       "gnome-nvidia-open")
-        BASE_IMAGE_NAME="bazzite-gnome-asus-nvidia-open"
+        BASE_IMAGE="bazzite-gnome-asus-nvidia-open"
         ;;
       *)
         echo "Error: Unknown variant '$VARIANT'"
@@ -98,11 +98,11 @@ case "$COMMAND" in
     esac
 
     echo "Building bazzingan-$VARIANT..."
-    echo "Using base image: $BASE_IMAGE_NAME"
+    echo "Using base image: $BASE_IMAGE"
 
     # Build the image
     podman build \
-      --build-arg="BASE_IMAGE_NAME=$BASE_IMAGE_NAME" \
+      --build-arg="BASE_IMAGE=$BASE_IMAGE" \
       --tag="localhost/bazzingan-$VARIANT:$TAG" \
       .
 
@@ -110,7 +110,7 @@ case "$COMMAND" in
     if [ "$VARIANT" = "kde-nvidia" ]; then
       echo "Building default bazzingan image..."
       podman build \
-        --build-arg="BASE_IMAGE_NAME=localhost/bazzingan-kde-nvidia:$TAG" \
+        --build-arg="BASE_IMAGE=localhost/bazzingan-kde-nvidia:$TAG" \
         --tag="localhost/bazzingan:$TAG" \
         .
     fi
