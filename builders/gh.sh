@@ -42,6 +42,12 @@ main() {
     /runners/desktop/install.sh
     echo "::endgroup::"
 
+    echo "::group:: ===» PERMISSION TWEAKS «==="
+    chmod +x /usr/bin/game-performance
+    chmod +x /usr/bin/dlss-force
+    chmod +x /usr/bin/dlss-force-skip-update
+    echo "::endgroup::"
+
     echo "::group:: ===» CLEANING UP «==="
     /runners/cleanup.sh
     echo "::endgroup::"
