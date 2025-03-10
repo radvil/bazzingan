@@ -14,6 +14,7 @@ papirus-folders -C yaru
 
 LAYERED_PACKAGES=(
   alacritty
+  goverlay
   gparted
   lazygit
   neovim
